@@ -5,8 +5,8 @@ Shell script to install a [SunCoin Masternode](http://suncoin-network.com/) on a
 ## Desktop wallet setup  
 
 1. Open the Desktop Wallet.
-2. Go to Debug console and generate a private key by typing *masternode genkey*
-3. Create a new receiving address and set label to **MN1**
+2. Go to Debug console and generate a private key by typing *masternode genkey*.
+3. Create a new receiving address and set label to **MN1**.
 4. Click on Copy address.
 5. Send **10000** SUN to **MN1**. You need to send all 10000 coins in one single transaction. Wait for 15 confirmations.
 6. Go back to Debug console and type *masternode outputs* to retrieve transaction id and output id.
@@ -22,6 +22,7 @@ Shell script to install a [SunCoin Masternode](http://suncoin-network.com/) on a
 wget -q https://raw.githubusercontent.com/tipinatipi/suncoin/master/suncoin_install.sh
 bash suncoin_install.sh
 ```
+You will need *masternodeprivkey* during installation. Once installed, go back to your local wallet and start masternode by clicking **Start Alias** button in Masternodes tab.
 
 ## Usage:
 ```
