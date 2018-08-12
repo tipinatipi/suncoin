@@ -228,22 +228,17 @@ function prepare_system() {
 echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} master node."
 echo -e "This might take 15-20 minutes and the screen will not move, so please be patient."
 apt-get update >/dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get update > /dev/null 2>&1
+DEBIAN_FRONTEND=noninteractive apt-get update >/dev/null 2>&1
 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade >/dev/null 2>&1
 apt-get upgrade >/dev/null 2>&1
 echo -e "${GREEN}Installing required dependencies, it may take some time to finish.${NC}"
 apt-get update >/dev/null 2>&1
-apt-get install build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils autoconf >/dev/null 2>&1
-apt-get install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev >/dev/null 2>&1
-apt-get install libboost-all-dev >/dev/null 2>&1
-apt-get install software-properties-common >/dev/null 2>&1
+apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils autoconf libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libboost-all-dev software-properties-common >/dev/null 2>&1
 echo -e "${GREEN}Adding bitcoin PPA repository"
 apt-add-repository -y ppa:bitcoin/bitcoin >/dev/null 2>&1
 echo -e "${GREEN}Installing required packages.${NC}"
 apt-get update >/dev/null 2>&1
-apt-get install libdb4.8-dev libdb4.8++-dev >/dev/null 2>&1
-apt-get install libzmq3-dev >/dev/null 2>&1
-apt-get install git >/dev/null 2>&1
+apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" libdb4.8-dev libdb4.8++-dev libzmq3-dev git >/dev/null 2>&1
 
 if [ "$?" -gt "0" ];
   then
