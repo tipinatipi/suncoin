@@ -26,12 +26,12 @@ NC='\033[0m'
 
 function install_sentinel() {
   echo -e "${GREEN}Install sentinel.${NC}"
-  apt-get -y install python-virtualenv virtualenv >/dev/null 2>&1
+  apt-get -y install python-virtualenv virtualenv
   cd
-  git clone $SENTINEL_REPO sentinel >/dev/null 2>&1
+  git clone $SENTINEL_REPO sentinel
   cd sentinel
-  virtualenv ./venv >/dev/null 2>&1
-  ./venv/bin/pip install -r requirements.txt >/dev/null 2>&1
+  virtualenv ./venv
+  ./venv/bin/pip install -r requirements.txt
   CRONTAB_LINE="* * * * * cd /root/sentinel && ./venv/bin/python bin/sentinel.py >> $CONFIGFOLDER/sentinel.log 2>&1"
   (crontab -l; echo "$CRONTAB_LINE") | crontab -
   cd -
@@ -44,14 +44,14 @@ function download_node() {
   wget -q $COIN_REPO
   compile_error
   COIN_ZIP=$(echo $COIN_REPO | awk -F'/' '{print $NF}')
-  tar xvf $COIN_ZIP --strip 1 >/dev/null 2>&1
+  tar xvf $COIN_ZIP --strip 1
   compile_error
   cd bin
   cp $COIN_DAEMON_FILE $COIN_CLI_FILE $COIN_TX_FILE /usr/local/bin
   compile_error
   strip $COIN_DAEMON $COIN_CLI
-  cd - >/dev/null 2>&1
-  rm -rf $TMP_FOLDER >/dev/null 2>&1
+  cd -
+  rm -rf $TMP_FOLDER
   chmod +x $COIN_DAEMON
   chmod +x $COIN_CLI
   clear
@@ -87,7 +87,7 @@ EOF
   systemctl daemon-reload
   sleep 3
   systemctl start $COIN_NAME.service
-  systemctl enable $COIN_NAME.service >/dev/null 2>&1
+  systemctl enable $COIN_NAME.service
 
   if [[ -z "$(ps axo cmd:100 | egrep $COIN_DAEMON)" ]]; then
     echo -e "${RED}$COIN_NAME is not running${NC}, please investigate. You should start by running the following commands as root:"
@@ -101,7 +101,7 @@ EOF
 
 function create_config() {
   echo -e "${GREEN}Creating configuration files in $CONFIGFOLDER.${NC}"
-  mkdir $CONFIGFOLDER >/dev/null 2>&1
+  mkdir $CONFIGFOLDER
   RPCUSER=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n1)
   RPCPASSWORD=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w22 | head -n1)
   cat << EOF > $CONFIGFOLDER/$CONFIG_FILE
@@ -163,13 +163,13 @@ EOF
 function enable_firewall() {
   echo -e "Installing and setting up firewall to allow ingress on port ${GREEN}$COIN_PORT${NC}"
   ufw allow $COIN_PORT/tcp comment "$COIN_NAME MN port" >/dev/null
-  ufw allow ssh comment "SSH" >/dev/null 2>&1
-  ufw limit ssh/tcp >/dev/null 2>&1
-  ufw default allow outgoing >/dev/null 2>&1
-  echo "y" | ufw enable >/dev/null 2>&1
-  apt-get -y install fail2ban >/dev/null 2>&1
-  systemctl enable fail2ban >/dev/null 2>&1
-  systemctl start fail2ban >/dev/null 2>&1
+  ufw allow ssh comment "SSH"
+  ufw limit ssh/tcp
+  ufw default allow outgoing
+  echo "y" | ufw enable
+  apt-get -y install fail2ban
+  systemctl enable fail2ban
+  systemctl start fail2ban
 }
 
 
@@ -227,18 +227,18 @@ fi
 function prepare_system() {
 echo -e "Preparing the system to install ${GREEN}$COIN_NAME${NC} master node."
 echo -e "This might take 15-20 minutes and the screen will not move, so please be patient."
-apt-get update >/dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get update >/dev/null 2>&1
-DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade >/dev/null 2>&1
-apt-get upgrade >/dev/null 2>&1
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" -y -qq upgrade
+apt-get upgrade
 echo -e "${GREEN}Installing required dependencies, it may take some time to finish.${NC}"
-apt-get update >/dev/null 2>&1
-apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils autoconf libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libboost-all-dev software-properties-common >/dev/null 2>&1
+apt-get update
+apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils autoconf libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libboost-all-dev software-properties-common
 echo -e "${GREEN}Adding bitcoin PPA repository"
-apt-add-repository -y ppa:bitcoin/bitcoin >/dev/null 2>&1
+apt-add-repository -y ppa:bitcoin/bitcoin
 echo -e "${GREEN}Installing required packages.${NC}"
-apt-get update >/dev/null 2>&1
-apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" libdb4.8-dev libdb4.8++-dev libzmq3-dev git >/dev/null 2>&1
+apt-get update
+apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" libdb4.8-dev libdb4.8++-dev libzmq3-dev git
 
 if [ "$?" -gt "0" ];
   then
@@ -280,7 +280,7 @@ function import_bootstrap() {
   wget -q $COIN_BS
   compile_error
   COIN_ZIP=$(echo $COIN_BS | awk -F'/' '{print $NF}')
-  unzip $COIN_ZIP >/dev/null 2>&1
+  unzip $COIN_ZIP
   compile_error
   cp -r ~/bootstrap/blocks ~/.acedcore/blocks
   cp -r ~/bootstrap/chainstate ~/.acedcore/chainstate
